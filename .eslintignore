@@ -1,0 +1,11 @@
+.DS_Store
+node_modules/
+config/
+
+build
+dist
+docs
+serviceWorker.js
+.eslintrc.js
+package.json*
+
