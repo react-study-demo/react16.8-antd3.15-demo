@@ -1,4 +1,11 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+ # demo info
+ >react 16.8.4+react-router1.3+react-redux6.0+antd3.15 demo
+
+- [preview-login](https://react-study-demo.github.io/react16.8-antd3.15-demo/build/#/login)
+- [preview-home](https://react-study-demo.github.io/react16.8-antd3.15-demo/build/#/home)
+ 
+ 
+ >This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
