@@ -1,10 +1,5 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-
->react16.8.4+react-router4.3.1+react-redux6.0.1+antd3.15-demo
->
->react16.8.4+react-router4.3.1+react-redux6.0.1+antd3.15-demo
-
 ## Available Scripts
 
 In the project directory, you can run:

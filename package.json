@@ -1,5 +1,5 @@
 {
-  "name": "react+react-router+antd-demo",
+  "name": "react-react-router-antd-demo",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -20,6 +20,7 @@
     "css-loader": "1.0.0",
     "dotenv": "6.0.0",
     "dotenv-expand": "4.2.0",
+    "echarts": "^4.2.1",
     "eslint": "5.12.0",
     "eslint-config-react-app": "^3.0.8",
     "eslint-loader": "2.1.1",
@@ -139,7 +140,8 @@
       "@babel/preset-env"
     ],
     "plugins": [
-      "@babel/plugin-proposal-function-bind", [
+      "@babel/plugin-proposal-function-bind",
+      [
         "@babel/plugin-proposal-class-properties",
         {
           "loose": true
