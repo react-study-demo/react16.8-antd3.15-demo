@@ -1,6 +1,6 @@
 {
   "name": "react-react-router-antd-demo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
     "@babel/core": "7.2.2",
@@ -72,6 +72,7 @@
     "lint-fix": "eslint --fix --ext .js --ext .jsx src/",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
   },
+  "homepage": ".",
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -140,8 +141,7 @@
       "@babel/preset-env"
     ],
     "plugins": [
-      "@babel/plugin-proposal-function-bind",
-      [
+      "@babel/plugin-proposal-function-bind", [
         "@babel/plugin-proposal-class-properties",
         {
           "loose": true
