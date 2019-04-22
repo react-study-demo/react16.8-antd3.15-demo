@@ -70,6 +70,7 @@ class ChartCom extends Component {
 }
 
 ChartCom.propTypes = {
+  hideConponent: PropTypes.func,
   option: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.object

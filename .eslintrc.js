@@ -326,7 +326,7 @@ module.exports = {
     // 禁止在 return 语句里使用 await
     'no-return-await': 'error',
     // 禁止出现 location.href = 'javascript:void(0)';
-    'no-script-url': 'error',
+    'no-script-url': 'off',
     // 禁止将自己赋值给自己
     'no-self-assign': 'error',
     // 禁止将自己与自己比较

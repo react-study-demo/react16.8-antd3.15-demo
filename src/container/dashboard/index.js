@@ -3,6 +3,7 @@
  */
 
 import React, { Component } from 'react';
+import BreadcrumbCom from '../../components/BreadcrumbCom';
 
 import ChartCom from '../../components/charts/ChartCom';
 import './index.less';
@@ -22,11 +23,13 @@ class HomeIndex extends Component {
           data: ['4-01', '4-02', '4-03', '4-04', '4-05', '4-06']
         },
         yAxis: {},
-        series: [{
-          name: '总人数',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
-        }]
+        series: [
+          {
+            name: '总人数',
+            type: 'bar',
+            data: [5, 20, 36, 10, 10, 20]
+          }
+        ]
       },
       // 折线图
       lineOption: {
@@ -39,10 +42,12 @@ class HomeIndex extends Component {
         yAxis: {
           type: 'value'
         },
-        series: [{
-          data: [20, 32, 41, 44, 90, 130, 120, 100, 120, 140, 150, 150],
-          type: 'line'
-        }]
+        series: [
+          {
+            data: [20, 32, 41, 44, 90, 130, 120, 100, 120, 140, 150, 150],
+            type: 'line'
+          }
+        ]
       },
       // 折线图
       lineOnOption: {
@@ -55,10 +60,12 @@ class HomeIndex extends Component {
         yAxis: {
           type: 'value'
         },
-        series: [{
-          data: [20, 32, 41, 44, 90, 130, 120, 100, 120, 140, 150, 150],
-          type: 'line'
-        }]
+        series: [
+          {
+            data: [20, 32, 41, 44, 90, 130, 120, 100, 120, 140, 150, 150],
+            type: 'line'
+          }
+        ]
       },
       // 折线图
       lineOffOption: {
@@ -71,10 +78,12 @@ class HomeIndex extends Component {
         yAxis: {
           type: 'value'
         },
-        series: [{
-          data: [20, 32, 41, 44, 90, 130, 120, 100, 120, 140, 150, 150],
-          type: 'line'
-        }]
+        series: [
+          {
+            data: [20, 32, 41, 44, 90, 130, 120, 100, 120, 140, 150, 150],
+            type: 'line'
+          }
+        ]
       },
       // 饼图
       pieOption: {
@@ -98,13 +107,7 @@ class HomeIndex extends Component {
             type: 'pie',
             radius: '55%',
             center: ['50%', '60%'],
-            data: [
-              { value: 115, name: '在职' },
-              { value: 10, name: '入职' },
-              { value: 4, name: '离职' },
-              { value: 5, name: '待入职' },
-              { value: 8, name: '待离职' }
-            ],
+            data: [{ value: 115, name: '在职' }, { value: 10, name: '入职' }, { value: 4, name: '离职' }, { value: 5, name: '待入职' }, { value: 8, name: '待离职' }],
             itemStyle: {
               emphasis: {
                 shadowBlur: 10,
@@ -129,12 +132,7 @@ class HomeIndex extends Component {
         },
         radar: [
           {
-            indicator: [
-              { text: '在职', max: 100 },
-              { text: '离职', max: 100 },
-              { text: '待入职', max: 100 },
-              { text: '待离职', max: 100 }
-            ],
+            indicator: [{ text: '在职', max: 100 }, { text: '离职', max: 100 }, { text: '待入职', max: 100 }, { text: '待离职', max: 100 }],
             center: ['50%', '50%'],
             radius: 80
           }
@@ -159,18 +157,26 @@ class HomeIndex extends Component {
   }
 
   render() {
+    const BreadcrumbData = [
+      {
+        path: '/home',
+        name: '首页'
+      }
+    ];
     return (
       <div className="index-content">
         <div className="content">
-          <div className="content-header border-box">首页</div>
+          <div className="content-header border-box">
+            <BreadcrumbCom BreadcrumbData={BreadcrumbData} />
+          </div>
           <div className="content-body m-t-15">
             <div className="content-body-flex flex flex-wrap">
-              <ChartCom option={this.state.barOption} index="0" ></ChartCom>
-              <ChartCom option={this.state.lineOption} index="1" width={640} height={400}></ChartCom>
-              <ChartCom option={this.state.lineOnOption} index="2" width={640} height={400}></ChartCom>
-              <ChartCom option={this.state.lineOffOption} index="3" width={640} height={400}></ChartCom>
-              <ChartCom option={this.state.pieOption} index="4" ></ChartCom>
-              <ChartCom option={this.state.radarOption} index="5" ></ChartCom>
+              <ChartCom option={this.state.barOption} index="0" />
+              <ChartCom option={this.state.lineOption} index="1" width={640} height={400} />
+              <ChartCom option={this.state.lineOnOption} index="2" width={640} height={400} />
+              <ChartCom option={this.state.lineOffOption} index="3" width={640} height={400} />
+              <ChartCom option={this.state.pieOption} index="4" />
+              <ChartCom option={this.state.radarOption} index="5" />
             </div>
           </div>
         </div>

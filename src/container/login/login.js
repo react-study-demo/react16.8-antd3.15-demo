@@ -23,7 +23,7 @@ class Login extends Component {
     this.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        history.push('/');
+        history.push('/home');
       }
       // 页面重定向
       // return <Redirect to="/index" />;
