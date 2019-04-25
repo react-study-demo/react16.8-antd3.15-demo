@@ -1,157 +1,144 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Button, Radio, Icon, Menu, Dropdown } from 'antd';
+// import { Redirect } from 'react-router-dom';
+// import logo from '../../logo.svg';
+import { Form, Icon, Input, Button, Radio, InputNumber, DatePicker, Upload, message } from 'antd';
+import './people.less';
 import BreadcrumbCom from '../BreadcrumbCom';
 
-class Buttons extends Component {
+function getBase64(img, callback) {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
+}
+
+function beforeUpload(file) {
+  const isJPG = file.type === 'image/jpeg';
+  if (!isJPG) {
+    message.error('You can only upload JPG file!');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error('Image must smaller than 2MB!');
+  }
+  return isJPG && isLt2M;
+}
+
+class editPeople extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      size: 'default',
-      loading: false,
-      iconLoading: false
+      top: 60,
+      loading: false
     };
+    this.getFieldProps = props.form.getFieldProps;
+    this.getFieldError = props.form.getFieldError;
+    this.isFieldValidating = props.form.isFieldValidating;
+    this.validateFields = props.form.validateFields;
+    this.getFieldValue = props.form.getFieldValue;
+  }
+  handleSubmit(e) {
+    e.preventDefault();
+    console.log(this.props);
+    const { history } = this.props;
+    this.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+        history.push('/home');
+      }
+      // 页面重定向
+      // return <Redirect to="/index" />;
+    });
   }
 
-  handleSizeChange(e) {
-    this.setState({ size: e.target.value });
+  handleChange(info) {
+    if (info.file.status === 'uploading') {
+      this.setState({ loading: true });
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj, imageUrl =>
+        this.setState({
+          imageUrl,
+          loading: false
+        })
+      );
+    }
   }
-  handleMenuClick(e) {
-    console.log('click', e);
-  }
-  enterLoading() {
-    this.setState({ loading: true });
-  }
-  enterIconLoading() {
-    this.setState({ iconLoading: true });
-  }
+
   render() {
+    const { getFieldDecorator } = this.props.form;
     const BreadcrumbData = [
       {
         path: '/home',
         name: '首页'
       },
       {
-        path: '/login',
-        name: '登录'
+        path: '',
+        name: '添加员工'
       }
     ];
-    const size = this.state.size;
-    const menu = (
-      <Menu onClick={this.handleMenuClick}>
-        <Menu.Item key="1">1st item</Menu.Item>
-        <Menu.Item key="2">2nd item</Menu.Item>
-        <Menu.Item key="3">3rd item</Menu.Item>
-      </Menu>
+    const config = {
+      rules: [{ type: 'object', required: true, message: '请选择入职时间' }]
+    };
+    const uploadButton = (
+      <div>
+        <Icon type={this.state.loading ? 'loading' : 'plus'} />
+        <div className="ant-upload-text">Upload</div>
+      </div>
     );
+    const imageUrl = this.state.imageUrl;
     return (
-      <div className="gutter-example button-demo">
+      <div className="body-container">
         <BreadcrumbCom BreadcrumbData={BreadcrumbData} />
-        <Row gutter={16}>
-          <Col className="gutter-row" md={12}>
-            <div className="gutter-box">
-              <Card bordered={false}>
-                <Button type="primary">Primary</Button>
-                <Button>Default</Button>
-                <Button type="dashed">Dashed</Button>
-                <Button type="danger">Danger</Button>
-              </Card>
-            </div>
-          </Col>
-          <Col className="gutter-row" md={12}>
-            <div className="gutter-box">
-              <Card bordered={false}>
-                <Button type="primary" shape="circle" icon="search" />
-                <Button type="primary" icon="search">
-                  Search
-                </Button>
-                <Button shape="circle" icon="search" />
-                <Button icon="search">Search</Button>
-                <br />
-                <Button shape="circle" icon="search" />
-                <Button icon="search">Search</Button>
-                <Button type="dashed" shape="circle" icon="search" />
-                <Button type="dashed" icon="search">
-                  Search
-                </Button>
-              </Card>
-            </div>
-          </Col>
-          <Col className="gutter-row" md={12}>
-            <div className="gutter-box">
-              <Card bordered={false}>
-                <Radio.Group value={size} onChange={this.handleSizeChange}>
-                  <Radio.Button value="large">Large</Radio.Button>
-                  <Radio.Button value="default">Default</Radio.Button>
-                  <Radio.Button value="small">Small</Radio.Button>
-                </Radio.Group>
-                <br />
-                <br />
-                <Button type="primary" shape="circle" icon="download" size={size} />
-                <Button type="primary" icon="download" size={size}>
-                  Download
-                </Button>
-                <Button type="primary" size={size}>
-                  Normal
-                </Button>
-                <br />
-                <Button.Group size={size}>
-                  <Button type="primary">
-                    <Icon type="left" />
-                    Backward
-                  </Button>
-                  <Button type="primary">
-                    Forward
-                    <Icon type="right" />
-                  </Button>
-                </Button.Group>
-              </Card>
-            </div>
-          </Col>
-          <Col className="gutter-row" md={12}>
-            <div className="gutter-box">
-              <Card bordered={false}>
-                <Button type="primary">primary</Button>
-                <Button>secondary</Button>
-                <Dropdown overlay={menu}>
-                  <Button>
-                    more <Icon type="down" />
-                  </Button>
-                </Dropdown>
-              </Card>
-            </div>
-          </Col>
-          <Col className="gutter-row" md={12}>
-            <div className="gutter-box">
-              <Card bordered={false}>
-                <Button type="primary" loading>
-                  Loading
-                </Button>
-                <Button type="primary" size="small" loading>
-                  Loading
-                </Button>
-                <br />
-                <Button type="primary" loading={this.state.loading} onClick={this.enterLoading}>
-                  Click me!
-                </Button>
-                <Button type="primary" icon="poweroff" loading={this.state.iconLoading} onClick={this.enterIconLoading}>
-                  Click me!
-                </Button>
-                <br />
-                <Button shape="circle" loading />
-                <Button type="primary" shape="circle" loading />
-              </Card>
-            </div>
-          </Col>
-        </Row>
-        <style>{`
-                    .button-demo .ant-btn {
-                        margin-right: 8px;
-                        margin-bottom: 12px;
-                    }
-                `}</style>
+        <Form onSubmit={this.handleSubmit.bind(this)} className="people-form">
+          <Form.Item label="用户名">
+            {getFieldDecorator('userName', {
+              rules: [{ required: true, message: '请输入用户名' }]
+            })(<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="请输入用户名" />)}
+          </Form.Item>
+          <Form.Item label="密码">
+            {getFieldDecorator('password', {
+              rules: [{ required: true, message: '请输入密码' }]
+            })(<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="请输入密码" />)}
+          </Form.Item>
+          <Form.Item label="头像">
+            {getFieldDecorator('imageUrl', {
+              rules: [{ required: true, message: '请上传头像' }]
+            })(
+              <div>
+                <Upload name="avatar" listType="picture-card" className="avatar-uploader" showUploadList={false} action="//jsonplaceholder.typicode.com/posts/" beforeUpload={beforeUpload} onChange={this.handleChange.bind(this)}>
+                  {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
+                </Upload>
+              </div>
+            )}
+          </Form.Item>
+          <Form.Item label="手机号">
+            {getFieldDecorator('phoneNumber', {
+              rules: [{ required: true, message: '请输入手机号' }]
+            })(<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="请输入手机号" />)}
+          </Form.Item>
+          <Form.Item label="性别">
+            {getFieldDecorator('sex', {
+              rules: [{ required: true, message: '请选择性别' }]
+            })(
+              <Radio.Group>
+                <Radio value="1">男</Radio>
+                <Radio value="2">女</Radio>
+              </Radio.Group>
+            )}
+          </Form.Item>
+          <Form.Item label="入职时间">{getFieldDecorator('hiredate', config)(<DatePicker />)}</Form.Item>
+          <Form.Item label="年龄">{getFieldDecorator('age', { initialValue: 18 })(<InputNumber min={18} max={100} />)}</Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" className="login-form-button">
+              确定
+            </Button>
+          </Form.Item>
+        </Form>
       </div>
     );
   }
 }
 
-export default Buttons;
+export default Form.create({ name: 'editPeople' })(editPeople);
