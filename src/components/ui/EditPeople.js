@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Form, Icon, Input, Button, Radio, InputNumber, DatePicker, Upload, message } from 'antd';
 import './people.less';
 import BreadcrumbCom from '../BreadcrumbCom';
+import { addPeople } from '../../api/addPeople.js';
 
 function getBase64(img, callback) {
   const reader = new FileReader();
@@ -39,15 +40,24 @@ class editPeople extends Component {
   handleSubmit(e) {
     e.preventDefault();
     console.log(this.props);
-    const { history } = this.props;
+
     this.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        history.push('/home');
+        this.addPeopleData();
       }
       // 页面重定向
       // return <Redirect to="/index" />;
     });
+  }
+
+  async addPeopleData() {
+    let that = this;
+    const { history } = that.props;
+    let res = await addPeople();
+    if (res.code) {
+      history.push('/home');
+    }
   }
 
   handleChange(info) {
@@ -64,6 +74,13 @@ class editPeople extends Component {
         })
       );
     }
+  }
+
+  onSuccess(ret) {
+    console.log('onSuccess', ret);
+    this.setState({
+      imageUrl: ret
+    });
   }
 
   render() {
@@ -107,8 +124,8 @@ class editPeople extends Component {
               rules: [{ required: true, message: '请上传头像' }]
             })(
               <div>
-                <Upload name="avatar" listType="picture-card" className="avatar-uploader" showUploadList={false} action="//jsonplaceholder.typicode.com/posts/" beforeUpload={beforeUpload} onChange={this.handleChange.bind(this)}>
-                  {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
+                <Upload name="avatar" listType="picture-card" className="avatar-uploader" showUploadList={false} action="//127.0.0.1:7001/upload" beforeUpload={beforeUpload} onSuccess={this.onSuccess.bind(this)} onChange={this.handleChange.bind(this)}>
+                  {imageUrl ? <img src={imageUrl} alt="avatar" className="avatar-img" /> : uploadButton}
                 </Upload>
               </div>
             )}

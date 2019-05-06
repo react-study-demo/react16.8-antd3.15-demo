@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import logo from '../../logo.svg';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import './login.less';
+import { login } from '../../api/login.js';
 
 class Login extends Component {
   constructor(props) {
@@ -17,18 +18,30 @@ class Login extends Component {
     this.getFieldValue = props.form.getFieldValue;
   }
   handleSubmit(e) {
+    let that = this;
     e.preventDefault();
     console.log(this.props);
-    const { history } = this.props;
+
     this.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        history.push('/home');
+        that.toLogin(values);
       }
       // 页面重定向
       // return <Redirect to="/index" />;
     });
   }
+
+  async toLogin(values) {
+    let that = this;
+    let res = await login(values);
+    const { history } = that.props;
+    if (res.code) {
+      localStorage.setItem('token', res.token);
+      history.push('/home');
+    }
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
