@@ -44,17 +44,17 @@ class editPeople extends Component {
     this.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        this.addPeopleData();
+        this.addPeopleData(values);
       }
       // 页面重定向
       // return <Redirect to="/index" />;
     });
   }
 
-  async addPeopleData() {
+  async addPeopleData(data) {
     let that = this;
     const { history } = that.props;
-    let res = await addPeople();
+    let res = await addPeople(data);
     if (res.code) {
       history.push('/home');
     }
@@ -67,9 +67,9 @@ class editPeople extends Component {
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl =>
+      getBase64(info.file.originFileObj, userPhote =>
         this.setState({
-          imageUrl,
+          // userPhote,
           loading: false
         })
       );
@@ -79,7 +79,7 @@ class editPeople extends Component {
   onSuccess(ret) {
     console.log('onSuccess', ret);
     this.setState({
-      imageUrl: ret
+      userPhote: ret.url
     });
   }
 
@@ -104,7 +104,7 @@ class editPeople extends Component {
         <div className="ant-upload-text">Upload</div>
       </div>
     );
-    const imageUrl = this.state.imageUrl;
+    const userPhote = this.state.userPhote;
     return (
       <div className="body-container">
         <BreadcrumbCom BreadcrumbData={BreadcrumbData} />
@@ -115,17 +115,31 @@ class editPeople extends Component {
             })(<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="请输入用户名" />)}
           </Form.Item>
           <Form.Item label="密码">
-            {getFieldDecorator('password', {
+            {getFieldDecorator('userPass', {
               rules: [{ required: true, message: '请输入密码' }]
             })(<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="请输入密码" />)}
           </Form.Item>
+          <Form.Item label="邮箱">
+            {getFieldDecorator('userEmail', {
+              rules: [
+                {
+                  type: 'email',
+                  message: '请输入邮箱'
+                },
+                {
+                  required: true,
+                  message: '请输入邮箱'
+                }
+              ]
+            })(<Input />)}
+          </Form.Item>
           <Form.Item label="头像">
-            {getFieldDecorator('imageUrl', {
+            {getFieldDecorator('userPhote', {
               rules: [{ required: true, message: '请上传头像' }]
             })(
               <div>
                 <Upload name="avatar" listType="picture-card" className="avatar-uploader" showUploadList={false} action="//127.0.0.1:7001/upload" beforeUpload={beforeUpload} onSuccess={this.onSuccess.bind(this)} onChange={this.handleChange.bind(this)}>
-                  {imageUrl ? <img src={imageUrl} alt="avatar" className="avatar-img" /> : uploadButton}
+                  {userPhote ? <img src={userPhote} alt="avatar" className="avatar-img" /> : uploadButton}
                 </Upload>
               </div>
             )}
@@ -136,7 +150,7 @@ class editPeople extends Component {
             })(<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="请输入手机号" />)}
           </Form.Item>
           <Form.Item label="性别">
-            {getFieldDecorator('sex', {
+            {getFieldDecorator('userSex', {
               rules: [{ required: true, message: '请选择性别' }]
             })(
               <Radio.Group>
@@ -146,7 +160,7 @@ class editPeople extends Component {
             )}
           </Form.Item>
           <Form.Item label="入职时间">{getFieldDecorator('hiredate', config)(<DatePicker />)}</Form.Item>
-          <Form.Item label="年龄">{getFieldDecorator('age', { initialValue: 18 })(<InputNumber min={18} max={100} />)}</Form.Item>
+          <Form.Item label="年龄">{getFieldDecorator('userAge', { initialValue: 18 })(<InputNumber min={18} max={100} />)}</Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" className="login-form-button">
               确定
