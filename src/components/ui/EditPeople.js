@@ -29,7 +29,8 @@ class editPeople extends Component {
     super(props);
     this.state = {
       top: 60,
-      loading: false
+      loading: false,
+      userPhoto: ''
     };
     this.getFieldProps = props.form.getFieldProps;
     this.getFieldError = props.form.getFieldError;
@@ -44,6 +45,7 @@ class editPeople extends Component {
     this.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        values.userPhoto = this.state.userPhoto;
         this.addPeopleData(values);
       }
       // 页面重定向
@@ -51,8 +53,26 @@ class editPeople extends Component {
     });
   }
 
+  async formatDate(date) {
+    let dates = new Date(date);
+    let year = dates.getFullYear();
+    let month = dates.getMonth() + 1;
+    if (month < 10) {
+      month = '0' + month;
+    }
+    let day = dates.getDay();
+    if (day < 10) {
+      day = '0' + day;
+    }
+    return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * 提交
+   */
   async addPeopleData(data) {
     let that = this;
+    data.hiredate = await that.formatDate(data.hiredate);
     const { history } = that.props;
     let res = await addPeople(data);
     if (res.code) {
@@ -67,9 +87,9 @@ class editPeople extends Component {
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
-      getBase64(info.file.originFileObj, userPhote =>
+      getBase64(info.file.originFileObj, userPhoto =>
         this.setState({
-          // userPhote,
+          // userPhoto,
           loading: false
         })
       );
@@ -79,7 +99,7 @@ class editPeople extends Component {
   onSuccess(ret) {
     console.log('onSuccess', ret);
     this.setState({
-      userPhote: ret.url
+      userPhoto: ret.url
     });
   }
 
@@ -104,7 +124,7 @@ class editPeople extends Component {
         <div className="ant-upload-text">Upload</div>
       </div>
     );
-    const userPhote = this.state.userPhote;
+    const userPhoto = this.state.userPhoto;
     return (
       <div className="body-container">
         <BreadcrumbCom BreadcrumbData={BreadcrumbData} />
@@ -134,12 +154,12 @@ class editPeople extends Component {
             })(<Input />)}
           </Form.Item>
           <Form.Item label="头像">
-            {getFieldDecorator('userPhote', {
+            {getFieldDecorator('userPhoto', {
               rules: [{ required: true, message: '请上传头像' }]
             })(
               <div>
                 <Upload name="avatar" listType="picture-card" className="avatar-uploader" showUploadList={false} action="//127.0.0.1:7001/upload" beforeUpload={beforeUpload} onSuccess={this.onSuccess.bind(this)} onChange={this.handleChange.bind(this)}>
-                  {userPhote ? <img src={userPhote} alt="avatar" className="avatar-img" /> : uploadButton}
+                  {userPhoto ? <img src={userPhoto} alt="avatar" className="avatar-img" /> : uploadButton}
                 </Upload>
               </div>
             )}

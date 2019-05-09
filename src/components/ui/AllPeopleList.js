@@ -59,16 +59,14 @@ class People extends Component {
       {
         title: '头像',
         dataIndex: 'userPhoto',
-        key: 'photo',
+        key: 'userPhoto',
         render: text => <img src={text} />
       },
       {
         title: '性别',
         dataIndex: 'userSex',
         key: 'userSex',
-        render: (text) => (
-          <span>{text === 0 ? '男' : '女'}</span>
-        )
+        render: text => <span>{text === 0 ? '男' : '女'}</span>
       },
       {
         title: '手机号',
@@ -117,7 +115,7 @@ class People extends Component {
           <span>
             <a href="javascript:;">Invite {record.name}</a>
             <Divider type="vertical" />
-            <a href="javascript:;">Delete</a>
+            <a href="javascript:;">删除</a>
           </span>
         )
       }
