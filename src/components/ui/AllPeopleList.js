@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Table, Divider } from 'antd';
+import { Table, Divider, Pagination, Popconfirm, message } from 'antd';
 import BreadcrumbCom from '../BreadcrumbCom';
-import { getPeople } from '../../api/allPeople.js';
+import { getPeople, delPeople } from '../../api/allPeople.js';
+
+import './people.less';
 
 class People extends Component {
   constructor(props) {
@@ -10,7 +12,10 @@ class People extends Component {
       size: 'default',
       loading: false,
       iconLoading: false,
-      tableData: []
+      tableData: [],
+      currentPage: 1,
+      pageSize: 10,
+      totalNum: 0
     };
   }
 
@@ -20,24 +25,62 @@ class People extends Component {
 
   async getPeopleData() {
     let that = this;
-    let res = await getPeople();
+    let data = {
+      currentPage: that.state.currentPage,
+      pageSize: that.state.pageSize
+    };
+    let res = await getPeople(data);
     if (res.code) {
-      that.setState({ tableData: res.data });
+      that.setState({ tableData: res.data, totalNum: res.totalNum });
     }
   }
 
-  handleSizeChange(e) {
-    this.setState({ size: e.target.value });
+
+  /* 页码变化 */
+  sizeChange(current, pageSize) {
+    let that = this;
+    that.setState({ pageSize, currentPage: 1 });
+    that.getPeopleData();
   }
-  handleMenuClick(e) {
-    console.log('click', e);
+  /* 当前页变化 */
+  async pageChange(pageNumber) {
+    let that = this;
+    console.log(pageNumber);
+    await that.setState({ currentPage: pageNumber });
+    await that.getPeopleData();
   }
-  enterLoading() {
-    this.setState({ loading: true });
+
+  // 编辑
+  toEdit(id, e) {
+    let that = this;
+    const { history } = that.props;
+    history.push('/home/EditPeople');
   }
-  enterIconLoading() {
-    this.setState({ iconLoading: true });
+
+  // 删除
+  confirm(id, e) {
+    let that = this;
+    that.deleteData({
+      userId: id
+    });
   }
+
+  cancel(e) {
+    console.log(e);
+  }
+
+  async deleteData(item) {
+    let that = this;
+    let data = {
+      userId: item.userId
+    };
+    let res = await delPeople(data);
+    if (res.code) {
+      message.success('删除成功！');
+      await that.getPeopleData();
+    }
+  }
+
   render() {
     const BreadcrumbData = [
       {
@@ -60,7 +103,7 @@ class People extends Component {
         title: '头像',
         dataIndex: 'userPhoto',
         key: 'userPhoto',
-        render: text => <img src={text} />
+        render: text => <img src={text} className="user-photo" />
       },
       {
         title: '性别',
@@ -78,17 +121,17 @@ class People extends Component {
         dataIndex: 'userAge',
         key: 'userAge'
       },
-      /* {
+      {
         title: '地址',
-        dataIndex: 'address',
-        key: 'address'
+        dataIndex: 'userAddress',
+        key: 'userAddress'
       },
       {
         title: '入职时间',
         dataIndex: 'hiredate',
         key: 'hiredate'
       },
-      {
+      /* {
         title: '标签',
         key: 'tags',
         dataIndex: 'tags',
@@ -113,53 +156,20 @@ class People extends Component {
         key: 'action',
         render: (text, record) => (
           <span>
-            <a href="javascript:;">Invite {record.name}</a>
+            <a href="javascript:;" onClick={this.toEdit.bind(this, text.userId)}>编辑</a>
             <Divider type="vertical" />
-            <a href="javascript:;">删除</a>
+            <Popconfirm title="确定删除?" onConfirm={this.confirm.bind(this, text.userId)} onCancel={this.cancel.bind(this)} okText="确定" cancelText="取消">
+              <a href="javascript:;" >删除</a>
+            </Popconfirm>
           </span>
         )
       }
     ];
-
-    // const data = [
-    //   {
-    //     key: '1',
-    //     name: 'John Brown',
-    //     photo: 'https://avatars0.githubusercontent.com/u/17672815?s=40&v=4',
-    //     sex: 1,
-    //     phoneNumber: '13003343567',
-    //     age: 32,
-    //     address: 'New York No. 1 Lake Park',
-    //     hiredate: '2019-04-23',
-    //     tags: ['nice', 'developer']
-    //   },
-    //   {
-    //     key: '2',
-    //     name: 'Jim Green',
-    //     photo: 'https://avatars0.githubusercontent.com/u/17672815?s=40&v=4',
-    //     sex: 1,
-    //     phoneNumber: '13003343567',
-    //     age: 42,
-    //     address: 'London No. 1 Lake Park',
-    //     hiredate: '2019-04-23',
-    //     tags: ['loser']
-    //   },
-    //   {
-    //     key: '3',
-    //     name: 'Joe Black',
-    //     photo: 'https://avatars0.githubusercontent.com/u/17672815?s=40&v=4',
-    //     sex: 1,
-    //     phoneNumber: '13003343567',
-    //     age: 32,
-    //     address: 'Sidney No. 1 Lake Park',
-    //     hiredate: '2019-04-23',
-    //     tags: ['cool', 'teacher']
-    //   }
-    // ];
     return (
       <div className="gutter-example button-demo">
         <BreadcrumbCom BreadcrumbData={BreadcrumbData} />
-        <Table columns={columns} dataSource={this.state.tableData} />
+        <Table columns={columns} dataSource={this.state.tableData} pagination={false} />
+        <Pagination showSizeChanger onShowSizeChange={this.sizeChange.bind(this)} onChange={this.pageChange.bind(this)} defaultCurrent={this.state.currentPage} total={this.state.totalNum} />
       </div>
     );
   }

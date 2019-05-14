@@ -179,6 +179,11 @@ class editPeople extends Component {
               </Radio.Group>
             )}
           </Form.Item>
+          <Form.Item label="地址">
+            {getFieldDecorator('userAddress', {
+              rules: [{ required: true, message: '请输入地址' }]
+            })(<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="请输入地址" />)}
+          </Form.Item>
           <Form.Item label="入职时间">{getFieldDecorator('hiredate', config)(<DatePicker />)}</Form.Item>
           <Form.Item label="年龄">{getFieldDecorator('userAge', { initialValue: 18 })(<InputNumber min={18} max={100} />)}</Form.Item>
           <Form.Item>

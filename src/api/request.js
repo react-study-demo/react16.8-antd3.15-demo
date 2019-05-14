@@ -155,6 +155,9 @@ export const postJsonRequest = (url, params) => {
  */
 
 export const postJson = (url, params) => {
+  if (localStorage.getItem('token')) {
+    token = localStorage.getItem('token');
+  }
   return new Promise((resolve, reject) => {
     service({
       method: 'post',
