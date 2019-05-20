@@ -5,4 +5,5 @@ import { postJson } from './request';
 
 /* Common */
 export const getPeople = data => postJson('/user/findAll', data);
+export const getOnePeople = data => postJson('/user/findUser', data);
 export const delPeople = data => postJson('/user/deleteUser', data);

@@ -54,7 +54,7 @@ class People extends Component {
   toEdit(id, e) {
     let that = this;
     const { history } = that.props;
-    history.push('/home/EditPeople');
+    history.push(`/home/EditPeople?userId=${id}`);
   }
 
   // 删除

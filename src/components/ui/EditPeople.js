@@ -5,6 +5,7 @@ import { Form, Icon, Input, Button, Radio, InputNumber, DatePicker, Upload, mess
 import './people.less';
 import BreadcrumbCom from '../BreadcrumbCom';
 import { addPeople } from '../../api/addPeople.js';
+import { getOnePeople } from '../../api/allPeople.js';
 
 function getBase64(img, callback) {
   const reader = new FileReader();
@@ -30,7 +31,10 @@ class editPeople extends Component {
     this.state = {
       top: 60,
       loading: false,
-      userPhoto: ''
+      userPhoto: '',
+      formDatas: {
+        userName: ''
+      }
     };
     this.getFieldProps = props.form.getFieldProps;
     this.getFieldError = props.form.getFieldError;
@@ -38,13 +42,25 @@ class editPeople extends Component {
     this.validateFields = props.form.validateFields;
     this.getFieldValue = props.form.getFieldValue;
   }
+
+  componentDidMount() {
+    if (this.props.query.userId) {
+      let userData = getOnePeople({ userId: this.props.query.userId });
+      userData.then(res => {
+        if (res.code) {
+          this.setState({
+            formDatas: res.data,
+            userPhoto: res.data.userPhoto
+          });
+        }
+      });
+    }
+  }
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.props);
 
     this.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         values.userPhoto = this.state.userPhoto;
         this.addPeopleData(values);
       }
@@ -131,16 +147,19 @@ class editPeople extends Component {
         <Form onSubmit={this.handleSubmit.bind(this)} className="people-form">
           <Form.Item label="用户名">
             {getFieldDecorator('userName', {
+              initialValue: this.state.formDatas.userName,
               rules: [{ required: true, message: '请输入用户名' }]
             })(<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="请输入用户名" />)}
           </Form.Item>
           <Form.Item label="密码">
             {getFieldDecorator('userPass', {
+              initialValue: this.state.formDatas.userPass,
               rules: [{ required: true, message: '请输入密码' }]
             })(<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="请输入密码" />)}
           </Form.Item>
           <Form.Item label="邮箱">
             {getFieldDecorator('userEmail', {
+              initialValue: this.state.formDatas.userEmail,
               rules: [
                 {
                   type: 'email',
@@ -155,6 +174,7 @@ class editPeople extends Component {
           </Form.Item>
           <Form.Item label="头像">
             {getFieldDecorator('userPhoto', {
+              initialValue: this.state.formDatas.userPhoto,
               rules: [{ required: true, message: '请上传头像' }]
             })(
               <div>
@@ -166,11 +186,13 @@ class editPeople extends Component {
           </Form.Item>
           <Form.Item label="手机号">
             {getFieldDecorator('phoneNumber', {
+              initialValue: this.state.formDatas.phoneNumber,
               rules: [{ required: true, message: '请输入手机号' }]
             })(<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="请输入手机号" />)}
           </Form.Item>
           <Form.Item label="性别">
             {getFieldDecorator('userSex', {
+              initialValue: this.state.formDatas.userSex,
               rules: [{ required: true, message: '请选择性别' }]
             })(
               <Radio.Group>
@@ -181,11 +203,12 @@ class editPeople extends Component {
           </Form.Item>
           <Form.Item label="地址">
             {getFieldDecorator('userAddress', {
+              initialValue: this.state.formDatas.userAddress,
               rules: [{ required: true, message: '请输入地址' }]
             })(<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="请输入地址" />)}
           </Form.Item>
-          <Form.Item label="入职时间">{getFieldDecorator('hiredate', config)(<DatePicker />)}</Form.Item>
-          <Form.Item label="年龄">{getFieldDecorator('userAge', { initialValue: 18 })(<InputNumber min={18} max={100} />)}</Form.Item>
+          <Form.Item label="入职时间">{getFieldDecorator('hiredate', { initialValue: this.state.formDatas.hiredate }, config)(<DatePicker />)}</Form.Item>
+          <Form.Item label="年龄">{getFieldDecorator('userAge', { initialValue: this.state.formDatas.userAge })(<InputNumber min={18} max={100} />)}</Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" className="login-form-button">
               确定
