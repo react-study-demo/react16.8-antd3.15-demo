@@ -7,3 +7,4 @@ import { postJson } from './request';
 export const getPeople = data => postJson('/user/findAll', data);
 export const getOnePeople = data => postJson('/user/findUser', data);
 export const delPeople = data => postJson('/user/deleteUser', data);
+export const updatePeople = data => postJson('/user/updateUser', data);

@@ -43,7 +43,7 @@ class homePage extends Component {
           <Layout>
             <AsideCom collapsed={this.state.collapsed} />
             <Layout>
-              <Content style={{ padding: '0 20px', marginTop: 64, marginLeft: this.state.collapsed ? 80 : 200 }}>
+              <Content style={{ padding: '0 20px', background: '#fff', marginTop: 64, marginLeft: this.state.collapsed ? 80 : 200 }}>
                 <ChildRoutes />
               </Content>
               <Footer style={{ textAlign: 'center' }}>Ant Design © {this.state.nowYear} Created by

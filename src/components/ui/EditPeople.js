@@ -5,7 +5,7 @@ import { Form, Icon, Input, Button, Radio, InputNumber, DatePicker, Upload, mess
 import './people.less';
 import BreadcrumbCom from '../BreadcrumbCom';
 import { addPeople } from '../../api/addPeople.js';
-import { getOnePeople } from '../../api/allPeople.js';
+import { getOnePeople, updatePeople } from '../../api/allPeople.js';
 
 function getBase64(img, callback) {
   const reader = new FileReader();
@@ -90,9 +90,19 @@ class editPeople extends Component {
     let that = this;
     data.hiredate = await that.formatDate(data.hiredate);
     const { history } = that.props;
+    if (that.state.formDatas.userId) {
+      data.userId = that.state.formDatas.userId;
+      let resUpdate = await updatePeople(data);
+      if (resUpdate.code) {
+        message.success('修改成功！');
+        history.push('/home/AllPeopleList');
+      }
+      return false;
+    }
     let res = await addPeople(data);
     if (res.code) {
-      history.push('/home');
+      message.success('添加成功！');
+      history.push('/home/AllPeopleList');
     }
   }
 
