@@ -9,6 +9,8 @@ import Buttons from './ui/Buttons';
 import AllPeopleList from './ui/AllPeopleList';
 import EditPeople from './ui/EditPeople';
 import Dashboard from '../container/dashboard/index.js';
+import Qrcode from './qrcode/Qrcode.js';
+import RichText from './richtext/index.js';
 
 // const WysiwygBundle = Loadable({
 //   // 按需加载富文本配置
@@ -21,6 +23,8 @@ export default {
   Buttons,
   Dashboard, // 后台首页
   AllPeopleList, // 所有人员列表
-  EditPeople // 编辑人员
+  EditPeople, // 编辑人员
+  Qrcode, // 二维码
+  RichText // 富文本
   // WysiwygBundle
 };
