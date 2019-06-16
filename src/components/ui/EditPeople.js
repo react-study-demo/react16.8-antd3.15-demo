@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import { Redirect } from 'react-router-dom';
 // import logo from '../../logo.svg';
+import moment from 'moment';
 import { Form, Icon, Input, Button, Radio, InputNumber, DatePicker, Upload, message } from 'antd';
 import './people.less';
 import BreadcrumbCom from '../BreadcrumbCom';
@@ -218,7 +219,7 @@ class editPeople extends Component {
             })(<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="请输入地址" />)}
           </Form.Item>
           <Form.Item label="入职时间">{getFieldDecorator('hiredate', { initialValue: this.state.formDatas.hiredate }, config)(<DatePicker />)}</Form.Item>
-          <Form.Item label="年龄">{getFieldDecorator('userAge', { initialValue: this.state.formDatas.userAge })(<InputNumber min={18} max={100} />)}</Form.Item>
+          <Form.Item label="年龄">{getFieldDecorator('userAge', { initialValue: moment(this.state.formDatas.userAge, 'YYYY-MM-DD') })(<InputNumber min={18} max={100} />)}</Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" className="login-form-button">
               确定

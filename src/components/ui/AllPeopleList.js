@@ -131,6 +131,21 @@ class People extends Component {
         dataIndex: 'hiredate',
         key: 'hiredate'
       },
+      {
+        title: '职位',
+        dataIndex: 'job',
+        key: 'job'
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'createDate',
+        key: 'createDate'
+      },
+      {
+        title: '更新时间',
+        dataIndex: 'updateDate',
+        key: 'updateDate'
+      },
       /* {
         title: '标签',
         key: 'tags',
