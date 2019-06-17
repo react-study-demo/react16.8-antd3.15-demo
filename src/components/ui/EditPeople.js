@@ -34,7 +34,8 @@ class editPeople extends Component {
       loading: false,
       userPhoto: '',
       formDatas: {
-        userName: ''
+        userName: '',
+        hiredate: new Date()
       }
     };
     this.getFieldProps = props.form.getFieldProps;
@@ -153,7 +154,7 @@ class editPeople extends Component {
     );
     const userPhoto = this.state.userPhoto;
     return (
-      <div className="body-container">
+      <div className="body-container edit-form">
         <BreadcrumbCom BreadcrumbData={BreadcrumbData} />
         <Form onSubmit={this.handleSubmit.bind(this)} className="people-form">
           <Form.Item label="用户名">
@@ -218,8 +219,14 @@ class editPeople extends Component {
               rules: [{ required: true, message: '请输入地址' }]
             })(<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="请输入地址" />)}
           </Form.Item>
-          <Form.Item label="入职时间">{getFieldDecorator('hiredate', { initialValue: this.state.formDatas.hiredate }, config)(<DatePicker />)}</Form.Item>
-          <Form.Item label="年龄">{getFieldDecorator('userAge', { initialValue: moment(this.state.formDatas.userAge, 'YYYY-MM-DD') })(<InputNumber min={18} max={100} />)}</Form.Item>
+          <Form.Item label="职位">
+            {getFieldDecorator('job', {
+              initialValue: this.state.formDatas.job,
+              rules: [{ required: false, message: '请输入职位' }]
+            })(<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="请输入职位" />)}
+          </Form.Item>
+          <Form.Item label="入职时间">{getFieldDecorator('hiredate', { initialValue: moment(this.state.formDatas.hiredate, 'YYYY-MM-DD') }, config)(<DatePicker />)}</Form.Item>
+          <Form.Item label="年龄">{getFieldDecorator('userAge', { initialValue: this.state.formDatas.userAge })(<InputNumber min={18} max={100} />)}</Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" className="login-form-button">
               确定

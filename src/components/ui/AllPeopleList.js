@@ -31,6 +31,8 @@ class People extends Component {
     };
     let res = await getPeople(data);
     if (res.code) {
+      /* eslint-disable */
+      console.log(res)
       that.setState({ tableData: res.data, totalNum: res.totalNum });
     }
   }
