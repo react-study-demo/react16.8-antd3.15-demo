@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 // import { Redirect } from 'react-router-dom';
 // import logo from '../../logo.svg';
 import moment from 'moment';
-import { Form, Icon, Input, Button, Radio, InputNumber, DatePicker, Upload, message } from 'antd';
+import { Form, Icon, Input, Button, Radio, Select, InputNumber, DatePicker, Upload, message } from 'antd';
 import './people.less';
 import BreadcrumbCom from '../BreadcrumbCom';
 import { addPeople } from '../../api/addPeople.js';
 import { getOnePeople, updatePeople } from '../../api/allPeople.js';
+
+const { Option } = Select;
 
 function getBase64(img, callback) {
   const reader = new FileReader();
@@ -35,6 +37,7 @@ class editPeople extends Component {
       userPhoto: '',
       formDatas: {
         userName: '',
+        userRole: '3',
         hiredate: new Date()
       }
     };
@@ -212,6 +215,12 @@ class editPeople extends Component {
                 <Radio value="2">女</Radio>
               </Radio.Group>
             )}
+          </Form.Item>
+          <Form.Item label="用户角色">
+            <Select defaultValue={this.state.formDatas.userRole}>
+              <Option value="2">人事</Option>
+              <Option value="3">员工</Option>
+            </Select>
           </Form.Item>
           <Form.Item label="地址">
             {getFieldDecorator('userAddress', {

@@ -129,6 +129,12 @@ class People extends Component {
         key: 'userAddress'
       },
       {
+        title: '角色',
+        dataIndex: 'userRole',
+        key: 'userRole',
+        render: text => <span>{text === 1? '管理员' : text === 2? '人事' : '员工'}</span>
+      },
+      {
         title: '入职时间',
         dataIndex: 'hiredate',
         key: 'hiredate'
